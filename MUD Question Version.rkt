@@ -8,7 +8,7 @@
 
 ;; User Objects
 (define objects '((1 "a silver dagger")
-                  (1 "a gold coin")))
+                  (2 "a gold coin")))
 
 ;; User Locations
 (define descriptions '((1 "You are in the lobby.")
@@ -118,11 +118,16 @@
                     (lostr (map (lambda (x) (slist->string x)) losym)))
                (printf "There seems to be exits to the ~a.\n" (string-join lostr " and "))))))))
 
+;------------------------------------------------------------------------------------------
+
+ ; Refactor this code:
 (define (assq-ref assqlist id)
   (cdr (assq id assqlist)))
 
-(define (assv-ref assqlist id)
-   (cdr (assv id assqlist)))
+#|(define (assv-ref assqlist id)
+   (cdr (assv id assqlist)))|#
+
+;------------------------------------------------------------------------------------------
 
 (define (get-description id)
   (car (assq-ref descriptions id)))
@@ -146,7 +151,7 @@
       (list-index (lambda (x) (eq? x n)) list-of-numbers))))
 
 (define (lookup id tokens)
-  (let* ((record (assv-ref decisiontable id)) ;changed assv to assq
+  (let* ((record (assq-ref decisiontable id)) ;now changed assv to assq 
          (keylist (get-keywords id))
          (index (index-of-largest-number (list-of-lengths keylist tokens))))
     (if index 
