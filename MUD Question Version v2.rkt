@@ -7,16 +7,19 @@
 ;------------------------------------------------------------------------------------------
 
  ; MUD objects ;
-(define objects '((1 "master sword")
-                  (2 "a gold coin")
-                  (3 "a gold coin")
-                  (4 "a gold coin")
-                  (5 "a gold coin")))
+(define objects '((1 "Master Sword")
+                  (5 "Fire Key")
+                  ))
 
  ; MUD locations ;
 (define descriptions '((1 "You are in the lobby, an old man stares at you.")
                        (2 "You are now outside, adventure awaits!")
-                       (3 "You are in a swamp.")))
+                       (4 "You've stubbled into a forrest, careful not to get lost!")
+                       (9 "Rats! it's a dead end. It's best to go back to way you came.")
+                       (10 "Rats! it's a dead end. It's best to go back to way you came.")
+                       (5 "You've uncovered the grass temple and enter it.")
+                       (6 "You are on a mountainside, the door infront is locked.")
+                       ))
 
  ; MUD user options ;
 (define look '(((directions) look) ((look) look) ((examine room) look)))
@@ -31,8 +34,14 @@
 
  ; MUD user decessions ;
 (define decisiontable `((1 ((south) 2) ,@actions)
-                        (2 ((north) 1) ,@actions)
-                        (3 ,@actions)))
+                        (2 ((north) 1) ((east) 3) ((south) 6) ((west) 4) ,@actions)
+                        (4 ((north) 9) ((east) 2) ((south) 5) ((west) 10) ,@actions)
+                        (9 ((south) 4) ,@actions)
+                        (10 ((east) 4) ,@actions)
+                        (5 ((north) 4) ((a teleporter) 1) ,@actions)
+                        (6 ((north) 2) ((south) 7) ,@actions)
+                        ))
+
 
 #| Note to self: consider actions ,@Speak and ,@Eat |#
 
@@ -50,13 +59,13 @@
     (let* ((result (filter (lambda (n) (number? (second n))) (cdr record)))
            (n (length result)))
       (cond ((= 0 n)
-             (printf "Oh? this room has no exits.\n"))
+             (printf "This room doesn't seem to have any available exits.\n"))
             ((= 1 n)
-             (printf "Look over there! there seems to be an exit to the ~a.\n" (slist->string (caar result))))
+             (printf "There is only one exit to the ~a.\n" (slist->string (caar result))))
             (else
              (let* ((losym (map (lambda (x) (car x)) result))
                     (lostr (map (lambda (x) (slist->string x)) losym)))
-               (printf "Oh? there seems to be exits to the ~a.\n" (string-join lostr " and "))))))))
+               (printf "There are a few exits, they are to the ~a.\n" (string-join lostr " and "))))))))
 
 ;------------------------------------------------------------------------------------------
 
@@ -120,14 +129,14 @@
   (let ((item (string-join (cdr (string-split input)))))
     (remove-object-from-inventory inventorydb id item)))
 
- ;Displays user help message 
+ ; Displays user help message 
 (define (display-help)
-  (printf "ADVISE: Hey! Listen! You need to make your way to the exit!
+  (printf "     TIP: Hey listen! Find all temples and uncover their secrects! (Grass> Fire> Water)
 COMMANDS: - input 'look' : will list all available directions from your position.
           - input 'pick' : allows you to obtain an item and stores it in your inventory. 
           - input 'put'  : allows you to abandon any unwanted items that you possess.
           - input 'bag'  : will display all the items you currently have stashed. 
-          - input 'exit' : quits the game at anytime. (warning: all progess will be lost)\n"))
+          - input 'exit' : quits the game at anytime. (WARNING: all progess will be lost)\n"))
 
  ; Displays user inventory
 (define (display-inventory)
@@ -155,7 +164,7 @@ COMMANDS: - input 'look' : will list all available directions from your position
 
 ;------------------------------------------------------------------------------------------
 
-;; Outputs a list
+ ; Outputs a list
 (define (list-of-lengths keylist tokens)
   (map 
    (lambda (x)
@@ -182,7 +191,7 @@ COMMANDS: - input 'look' : will list all available directions from your position
 
 ;------------------------------------------------------------------------------------------
 
-;; Start Game
+ ; Start Game
 (define (startgame initial-id)
   (let loop ((id initial-id) (description #t))
     (when description
@@ -219,5 +228,5 @@ COMMANDS: - input 'look' : will list all available directions from your position
 
 ;------------------------------------------------------------------------------------------
 
-;; Output
+ ; Output
 (startgame 1)
