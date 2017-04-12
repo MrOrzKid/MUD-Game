@@ -7,9 +7,10 @@
 ;------------------------------------------------------------------------------------------
 
  ; MUD objects ;
-(define objects '((1 "Master Sword")
-                  (5 "Fire Key")
-                  ))
+(define objects '((1 "master sword")
+                  (5 "fire key")
+                  (7 "water stone")
+                  (8 "heart container")))
 
  ; MUD locations ;
 (define descriptions '((1 "You are in the lobby, an old man stares at you.")
@@ -19,7 +20,9 @@
                        (10 "Rats! it's a dead end. It's best to go back to way you came.")
                        (5 "You've uncovered the grass temple and enter it.")
                        (6 "You are on a mountainside, the door infront is locked.")
-                       ))
+                       (7 "You are inside the fire temple. It's very hot, better not stay here too long.")
+                       (3 "You've hit a luxurious riverside. There is an odd keystone, something must go here.")
+                       (8 "You finally reached the end, here is your reward!")))
 
  ; MUD user options ;
 (define look '(((directions) look) ((look) look) ((examine room) look)))
@@ -39,11 +42,10 @@
                         (9 ((south) 4) ,@actions)
                         (10 ((east) 4) ,@actions)
                         (5 ((north) 4) ((a teleporter) 1) ,@actions)
-                        (6 ((north) 2) ((south) 7) ,@actions)
-                        ))
-
-
-#| Note to self: consider actions ,@Speak and ,@Eat |#
+                        (6 ((north) 2) ((south) 6) ((a fire key is required) 7) ,@actions)
+                        (7 ((north) 6) ((a teleporter) 1) ,@actions)
+                        (3 ((south) 3) ((west) 2) ((a water stone is required) 8) ,@actions)
+                        (8 ((north) 3) ((a teleporter) 1) ,@actions)))
 
 ;------------------------------------------------------------------------------------------
 
@@ -65,7 +67,7 @@
             (else
              (let* ((losym (map (lambda (x) (car x)) result))
                     (lostr (map (lambda (x) (slist->string x)) losym)))
-               (printf "There are a few exits, they are to the ~a.\n" (string-join lostr " and "))))))))
+               (printf "There are a few exits detected, they are to the ~a.\n" (string-join lostr " and "))))))))
 
 ;------------------------------------------------------------------------------------------
 
@@ -102,9 +104,27 @@
       (cond ((null? item) 
              (printf "That item is not in this room.\n"))
             (else
-             (printf "You are now carrying a ~a.\n" (first item))
+             (printf "You are now carrying a ~a.\n" (first item))            
              (add-object inventorydb 'bag (first item))
-             (hash-set! db id result))))))
+             ;item: master sword event
+             (if (eq? (first item) "master sword")
+                 (begin
+                   (printf "Old man: It's dangerous to go alone! take this.\n"))
+             ;item: fire key event
+             (if (eq? (first item) "fire key")
+                 (begin
+                   (printf "Hint: use 'fire key' at the mountainside.\n"))
+             ;item: water stone event
+             (if (eq? (first item) "water stone")
+                 (begin
+                   (printf "Hint: use 'water stone' at the riverside.\n"))
+             ;item: heart container event
+             (if (eq? (first item) "heart container")
+                (begin
+                  (printf "Congratulations! you've uncovered the temples secrects!\n")
+                  (exit))
+                
+             (hash-set! db id result))))))))))
 
  ; Removes object (from inventory)
 (define (remove-object-from-inventory db id str)
@@ -219,7 +239,7 @@ COMMANDS: - input 'look' : will list all available directions from your position
               ((eq? response 'inventory)
                (display-inventory)
                (loop id #f))
-              ((eq? response 'help)
+              ((eq? response 'help) ;extra function added
                (display-help)
                (loop id #f)) 
               ((eq? response 'quit)
