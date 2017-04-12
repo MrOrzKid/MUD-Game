@@ -67,7 +67,7 @@
             (else
              (let* ((losym (map (lambda (x) (car x)) result))
                     (lostr (map (lambda (x) (slist->string x)) losym)))
-               (printf "There are a few exits detected, they are to the ~a.\n" (string-join lostr " and "))))))))
+               (printf "There are a multiple exits detected, they are to the ~a.\n" (string-join lostr " and "))))))))
 
 ;------------------------------------------------------------------------------------------
 
@@ -106,25 +106,27 @@
             (else
              (printf "You are now carrying a ~a.\n" (first item))            
              (add-object inventorydb 'bag (first item))
-             ;item: master sword event
+             
+             #|item: master sword event
              (if (eq? (first item) "master sword")
                  (begin
                    (printf "Old man: It's dangerous to go alone! take this.\n"))
-             ;item: fire key event
+             item: fire key event
              (if (eq? (first item) "fire key")
                  (begin
                    (printf "Hint: use 'fire key' at the mountainside.\n"))
-             ;item: water stone event
+             item: water stone event
              (if (eq? (first item) "water stone")
                  (begin
-                   (printf "Hint: use 'water stone' at the riverside.\n"))
+                   (printf "Hint: use 'water stone' at the riverside.\n"))|#
+             
              ;item: heart container event
              (if (eq? (first item) "heart container")
                 (begin
                   (printf "Congratulations! you've uncovered the temples secrects!\n")
                   (exit))
                 
-             (hash-set! db id result))))))))))
+             (hash-set! db id result)))))))
 
  ; Removes object (from inventory)
 (define (remove-object-from-inventory db id str)
