@@ -39,8 +39,8 @@
 ;------------------------------------------------------------------------------------------
 
 ;; Configuration
-(define X 5)
-(define Y 5)
+(define X 15)
+(define Y 15)
 (define  start  '(0 0))
 
 ;; Maze algorithm with X and Y = M and N
@@ -102,7 +102,7 @@
 ;------------------------------------------------------------------------------------------
 
 ;; Rooms 
-(define room-type '((0 "Entrance")
+(define room-type '((0 "entrance")
                     (1 "hall")
                     (2 "hallway")
                     (3 "corridor")
@@ -150,3 +150,4 @@
 
 ;; Output
 (startgame start)
+
