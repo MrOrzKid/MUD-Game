@@ -14,8 +14,8 @@
 
  ; MUD locations ;
 (define descriptions '((1 "You are in the lobby, an old man stares at you.")
-                       (2 "You are now outside, the smell of fresh air is refreshing!")
-                       (4 "You've stubbled into a forrest, it looks easy to get lost.")
+                       (2 "You are now outside, the smell of fresh air is so refreshing!")
+                       (4 "You've stubbled into a forest, it looks easy to get lost.")
                        (9 "Rats! a dead end. It's best to go back to way you came in.")
                        (10 "Rats! a dead end. It's best to go back to way you came in.")
                        (5 "You've located the grass temple and find yourself inside it.")
@@ -27,7 +27,7 @@
  ; MUD user options ;
 (define look '(((directions) look) ((look) look) ((examine room) look)))
 (define pick '(((get) pick) ((pickup) pick) ((pick) pick) ((take) pick)))
-(define put '(((put) drop) ((drop) drop) ((place) drop) ((remove) drop)))
+(define put '(((put) drop) ((drop) drop) ((place) drop) ((remove) drop) ((use) drop)))
 (define inventory '(((inventory) inventory) ((bag) inventory)))
 
 (define help '(((help) help)))
@@ -151,7 +151,7 @@
   (printf "     TIP: Hey listen! Find all temples and uncover their secrects! (Grass> Fire> Water)
 COMMANDS: - input 'look' : will list all available directions from your position.
           - input 'pick' : allows you to obtain an item and stores it in your inventory. 
-          - input 'put'  : allows you to put items down or into something else.
+          - input 'put'  : allows you to put items down or into another object.
           - input 'bag'  : will display all the items you currently have stashed. 
           - input 'exit' : quits the game at anytime. (WARNING: all progess will be lost)\n"))
 
