@@ -14,15 +14,15 @@
 
  ; MUD locations ;
 (define descriptions '((1 "You are in the lobby, an old man stares at you.")
-                       (2 "You are now outside, adventure awaits!")
-                       (4 "You've stubbled into a forrest, careful not to get lost!")
-                       (9 "Rats! it's a dead end. It's best to go back to way you came.")
-                       (10 "Rats! it's a dead end. It's best to go back to way you came.")
-                       (5 "You've uncovered the grass temple and now inside it.")
-                       (6 "You are on a mountainside, the door infront is locked.")
-                       (7 "You are inside the fire temple. It's very hot, better not stay here too long.")
-                       (3 "You've hit a luxurious riverside. There is an odd keystone, something must go here.")
-                       (8 "You finally reached the end, here is your reward!")))
+                       (2 "You are now outside, the smell of fresh air is refreshing!")
+                       (4 "You've stubbled into a forrest, it looks easy to get lost.")
+                       (9 "Rats! a dead end. It's best to go back to way you came in.")
+                       (10 "Rats! a dead end. It's best to go back to way you came in.")
+                       (5 "You've located the grass temple and find yourself inside it.")
+                       (6 "You find a mountainside, the gates ahead seem to require a key.")
+                       (7 "You enter the fire temple. Tt's very hot here, better not stay long.")
+                       (3 "You've struck a riverside. There is an odd keystone, something must go here.")
+                       (8 "You beat the final temple, here is a piece of heart as your reward!")))
 
  ; MUD user options ;
 (define look '(((directions) look) ((look) look) ((examine room) look)))
@@ -55,7 +55,7 @@
  ; Creates inventory database
 (define inventorydb (make-hash))
 
- ; Available directions
+ ; Available directions ;
 (define (get-directions id)
   (let ((record (assq id decisiontable)))
     (let* ((result (filter (lambda (n) (number? (second n))) (cdr record)))
@@ -151,7 +151,7 @@
   (printf "     TIP: Hey listen! Find all temples and uncover their secrects! (Grass> Fire> Water)
 COMMANDS: - input 'look' : will list all available directions from your position.
           - input 'pick' : allows you to obtain an item and stores it in your inventory. 
-          - input 'put'  : allows you to abandon any unwanted items that you possess.
+          - input 'put'  : allows you to put items down or into something else.
           - input 'bag'  : will display all the items you currently have stashed. 
           - input 'exit' : quits the game at anytime. (WARNING: all progess will be lost)\n"))
 
@@ -208,7 +208,7 @@ COMMANDS: - input 'look' : will list all available directions from your position
 
 ;------------------------------------------------------------------------------------------
 
- ; Start Game
+ ; Start Game ;
 (define (startgame initial-id)
   (let loop ((id initial-id) (description #t))
     (when description
