@@ -42,9 +42,9 @@
                         (9 ((south) 4) ,@actions)
                         (10 ((east) 4) ,@actions)
                         (5 ((north) 4) ((a teleporter) 1) ,@actions)
-                        (6 ((north) 2) ((south) 6) ((a fire key is required) 7) ,@actions)
+                        (6 ((north) 2) ((south) 6) ((fire key) 7) ,@actions)
                         (7 ((north) 6) ((a teleporter) 1) ,@actions)
-                        (3 ((south) 3) ((west) 2) ((a water stone is required) 8) ,@actions)
+                        (3 ((south) 3) ((west) 2) ((a water stone) 8) ,@actions)
                         (8 ((north) 3) ((a teleporter) 1) ,@actions)))
 
 ;------------------------------------------------------------------------------------------
@@ -105,27 +105,12 @@
              (printf "That item is not in this room.\n"))
             (else
              (printf "You are now carrying a ~a.\n" (first item))            
-             (add-object inventorydb 'bag (first item))
-             
-             #|item: master sword event
-             (if (eq? (first item) "master sword")
-                 (begin
-                   (printf "Old man: It's dangerous to go alone! take this.\n"))
-             item: fire key event
-             (if (eq? (first item) "fire key")
-                 (begin
-                   (printf "Hint: use 'fire key' at the mountainside.\n"))
-             item: water stone event
-             (if (eq? (first item) "water stone")
-                 (begin
-                   (printf "Hint: use 'water stone' at the riverside.\n"))|#
-             
+             (add-object inventorydb 'bag (first item))      
              ;item: heart container event
              (if (eq? (first item) "heart container")
                 (begin
                   (printf "Congratulations! you've uncovered the temples secrects!\n")
                   (exit))
-                
              (hash-set! db id result)))))))
 
  ; Removes object (from inventory)
@@ -138,8 +123,13 @@
              (printf "You are not carrying that item!\n"))
             (else
              (printf "You removed a ~a from your bag.\n" (first item))
-             (add-object objectdb id (first item))
-             (hash-set! db 'bag result))))))
+             (add-object objectdb id (first item))             
+             ;item: fire key event
+             (if (eq? (first item) "fire key")
+                (begin
+                  (printf "You've unlocked the fire temple doors!\n"))
+                  ;(null))
+             (hash-set! db 'bag result)))))))
 
  ; Pick-up user item
 (define (pick-item id input)
